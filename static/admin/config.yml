@@ -1,13 +1,13 @@
 # static/admin/config.yml
-
+local_backend: true
 # Backend Configuration:
 # Choose one backend. GitHub is often simplest if clients have GitHub accounts.
 # git-gateway requires additional setup (often with Netlify Identity or similar).
 backend:
-  name: test-repo # github, gitlab, bitbucket, or git-gateway
-  #repo: your-github-username/client-site-repo # Replace with the actual repo path pattern or specific repo
-  #branch: main # Or whatever branch Decap CMS should commit to
-  # For git-gateway with Netlify Identity:
+  name: github  # github, gitlab, bitbucket, or git-gateway
+  repo: SiteNexus/test-client # Replace with the actual repo path pattern or specific repo
+  branch: main # Or whatever branch Decap CMS should commit to
+  site_domain: cms.netlify.com 
   # name: git-gateway
   # For GitHub backend, you might need site_domain for OAuth if deploying on Netlify/Vercel
   # site_domain: client-domain.com

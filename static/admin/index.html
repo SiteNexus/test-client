@@ -33,11 +33,11 @@
     // This will load the config from the specified configUrl
     if (window.CMS) {
       // If CMS is already defined, use it
-      CMS.init({ configUrl: config.configUrl });
+      //CMS.init({ configUrl: config.configUrl });
     } else {
       // Otherwise, wait for the Decap CMS script to load
       document.addEventListener("DOMContentLoaded", function() {
-        CMS.init({ configUrl: config.configUrl });
+        //CMS.init({ configUrl: config.configUrl });
       });
     }
     //CMS.init(config);
