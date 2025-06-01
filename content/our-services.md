@@ -3,7 +3,7 @@ title: ServicesGrid
 slug: services
 layout: services-grid
 description: We offer a wide range of web solutions to help your business succeed online, from initial design to ongoing support.
-# Optional: services_section_title: "What We Offer" 
+# Optional:    services_section_title: "What We Offer" 
 
 service_items:
   - item_icon: "🛠️" # Font Awesome icon example
