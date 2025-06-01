@@ -1,0 +1,45 @@
+{# templates/layouts/services-grid.html #}
+
+{# First, render the main page content from the Markdown body #}
+{% if entry.content_html %}
+    <article class="page-content mb-5">
+        {{ entry.content_html | safe }}
+    </article>
+{% endif %}
+
+{# Then, render the grid of service/feature items if they exist #}
+{% if entry.service_items and entry.service_items is iterable and entry.service_items is not string and entry.service_items | length > 0 %}
+<section class="services-grid-section mt-4 pt-4 border-top">
+    {# You can add a section title here if desired, or make it configurable via frontmatter #}
+    {# Example: <h2 class="text-center mb-4">{{ entry.services_section_title | default("Our Core Services") }}</h2> #}
+    
+    <div class="row">
+        {% for item in entry.service_items %}
+        <div class="col-sm-6 col-md-4 mb-4 d-flex align-items-stretch"> {# Bootstrap column for responsive grid, d-flex for equal height cards #}
+            <div class="card h-100 text-center"> {# h-100 to make cards in a row same height #}
+                {% if item.item_icon %}
+                    <div class="card-icon pt-4">
+                        {% if item.item_icon.startswith('fa-') %}
+                            {# Assuming Font Awesome 5 - ensure you have it linked in base.html if you use this #}
+                            <i class="{{ item.item_icon }} fa-3x mb-3 text-primary"></i>
+                        {% elif item.item_icon.endswith(('.svg', '.png', '.jpg', '.jpeg', '.gif')) %}
+                            <img src="{{ item.item_icon if item.item_icon.startswith('/') else url_for('static', filename=item.item_icon) }}" alt="{{ item.item_title }} icon" style="max-height: 60px; margin-bottom: 1rem;">
+                        {% else %}
+                            {# Fallback for non-FontAwesome text that's not clearly an image path, or a default visual #}
+                            <span class="text-primary display-4 mb-3">{{ item.item_icon }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ item.item_title | default("Service Title") }}</h5>
+                    <p class="card-text flex-grow-1">{{ item.item_description | default("Description coming soon.") }}</p>
+                    {% if item.item_link %}
+                        <a href="{{ item.item_link }}" class="btn btn-primary mt-auto">Learn More</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Manager | SiteNexus</title>
+  </head>
+<body>
+  <div id="nc-root"></div> 
+  <link href="/static/admin/config.yml" type="text/yaml" rel="cms-config-url">
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // Ensure the CMS object is available from the Decap script
+    // You might need to wait for DOMContentLoaded or ensure the Decap script has fully loaded
+    // if you encounter issues with CMS being undefined.
+    // However, placing this script tag after the Decap script tag is usually sufficient.
+
+    var config = {
+      // Your backend config from config.yml can also be partly defined here if needed,
+      // but configUrl is usually enough if config.yml contains the backend.
+      // Example:
+      // backend: {
+      //   name: "test-repo" // Or "github", "git-gateway" etc.
+      // },
+      // media_folder: "/static/assets/uploads", // Can also be defined here or in config.yml
+      // public_folder: "/static/assets/uploads"
+    };
+
+    // Tell Decap CMS exactly where your config.yml is located
+    // This path is relative to the root of your site.
+    config.configUrl = "/static/admin/config.yml"; 
+    
+    // Initialize Decap CMS with the config
+    // This will load the config from the specified configUrl
+    if (window.CMS) {
+      // If CMS is already defined, use it
+      CMS.init({ configUrl: config.configUrl });
+    } else {
+      // Otherwise, wait for the Decap CMS script to load
+      document.addEventListener("DOMContentLoaded", function() {
+        CMS.init({ configUrl: config.configUrl });
+      });
+    }
+    //CMS.init(config);
+
+    // If using Netlify Identity
+    // if (window.netlifyIdentity) {
+    //   window.netlifyIdentity.on("init", user => {
+    //     if (!user) {
+    //       window.netlifyIdentity.on("login", () => {
+    //         document.location.href = "/admin/"; // Or /static/admin/
+    //       });
+    //     }
+    //   });
+    // }
+  </script>
+</body>
+</html>

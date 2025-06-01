@@ -1,0 +1,202 @@
+/* static/css/style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 0 20px;
+}
+
+.site-header {
+    background: #333;
+    color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: #0779e4 3px solid;
+}
+
+.site-header a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.site-header .logo a {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.site-header .main-navigation ul {
+    padding: 0;
+    list-style: none;
+    float: right; /* Basic float for alignment */
+}
+
+.site-header .main-navigation ul li {
+    display: inline;
+    padding: 0 15px;
+}
+
+.site-header .main-navigation ul li a:hover {
+    color: #0779e4;
+}
+
+/* Clearfix for floated navigation */
+.site-header .container::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+
+main.container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #fff;
+    min-height: 60vh; /* Ensure footer doesn't jump up on short pages */
+}
+
+.site-footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.custom-hero-section {
+    /* If you want the hero section itself to not be full width of its parent */
+    /* max-width: 900px; */ /* Example: constrain the whole hero area */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    padding: 1rem 0; /* Add some padding if needed */
+}
+
+.custom-hero-image {
+    /* This class is on the <img> tag */
+    max-width: 100%; /* This is what img-fluid does, ensures responsiveness */
+    height: auto;    /* This is also part of img-fluid, maintains aspect ratio */
+
+    /* OPTION 1: If you want to limit its maximum height */
+    max-height: 350px; /* Adjust this value as needed */
+    /* object-fit: cover; */ /* If using max-height, you might need object-fit to control how the image scales within the constrained box. 'cover' will fill, 'contain' will fit. */
+    /* width: auto; */ /* If max-height is set, width:auto might be needed if it was previously 100% */
+
+
+    /* OPTION 2: If you want the image to be less than 100% of its container, and centered */
+    /* display: block; */ /* Needed for margin: auto to work on an image */
+    /* width: 80%; */ /* Example: make it 80% of the .custom-hero-section width */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+
+    /* OPTION 3: If the SVG's intrinsic aspect ratio is making it too tall even when width-constrained */
+    /* You might need to control the container of the SVG, or the SVG's viewBox,
+       but typically max-height (Option 1) is the most direct CSS approach for an <img> tag.
+       If your .custom-hero-section is already constrained in width,
+       then img-fluid on .custom-hero-image should make it fit that width and scale height proportionally.
+       The SVG itself has a viewBox="0 0 1200 400", which is a 3:1 aspect ratio.
+       If its container is 900px wide, the SVG (with img-fluid) would render at 900px wide and 300px tall.
+    */
+}
+
+article img { /* Targets all images inside an <article> tag */
+    max-width: 100%; /* Makes images responsive */
+    height: auto;    /* Maintains aspect ratio */
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: block; /* For centering with margin: auto */
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 4px; /* Optional: rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: subtle shadow */
+}
+
+/* For images directly inside a paragraph, you might want different margins */
+article p > img {
+    margin-left: 0; /* Or specific alignment if floated */
+    margin-right: 0;
+}
+
+/* static/css/style.css */
+/* ... your existing styles ... */
+
+.testimonial-card {
+    /* Add a subtle border or background if desired */
+    /* border-left: 5px solid #007bff; */ /* Example accent border */
+    /* background-color: #f9f9f9; */
+}
+
+.testimonial-card .card-body {
+    position: relative; /* For absolute positioning of quote marks if desired */
+}
+
+.testimonial-quote {
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 1rem;
+    /* Optional: Add pseudo-elements for large quote marks */
+}
+
+.testimonial-quote::before {
+    /* content: '\201C'; opening quote */
+    /* font-size: 3rem; */
+    /* color: #e0e0e0; */
+    /* position: absolute; */
+    /* left: 10px; */
+    /* top: 0px; */
+}
+
+.testimonial-author-photo {
+    border: 3px solid #dee2e6; /* Example border for photo */
+}
+
+.blockquote-footer strong {
+    display: block; /* Make name and title on separate lines if desired */
+}
+
+/* static/css/style.css */
+/* ... your existing styles ... */
+
+.pricing-table-section .card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.pricing-table-section .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.pricing-table-section .popular-plan {
+    /* Bootstrap already applies border-primary border-2 */
+    /* You could add a subtle background or larger shadow */
+    transform: scale(1.02); /* Slightly larger featured plan */
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.pricing-table-section .card-header {
+    padding: 1.5rem 1rem;
+    font-size: 1.25rem;
+}
+
+.pricing-table-section .pricing-card-title {
+    font-size: 2.8rem;
+    font-weight: 300;
+}
+
+.pricing-table-section .list-unstyled li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+.pricing-table-section .list-unstyled li:last-child {
+    border-bottom: none;
+}

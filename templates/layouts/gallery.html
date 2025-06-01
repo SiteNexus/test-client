@@ -1,0 +1,14 @@
+{# templates/layouts/gallery.html #}
+{# <h1>{{ entry.title }}</h1> #} {# Title might already be in page.html or base.html #}
+{% if entry.gallery_images and entry.gallery_images is iterable and entry.gallery_images is not string %}
+<div class="gallery-container row my-4">
+    {% for image_path in entry.gallery_images %}
+    <div class="col-md-4 mb-3"> {# Bootstrap column for 3 images per row, with margin #}
+        <img src="{{ image_path if image_path.startswith('/') else url_for('static', filename=image_path) }}" alt="Gallery image" class="img-fluid rounded shadow">
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<article class="content-gallery">
+    {{ entry.content_html | safe }}
+</article>

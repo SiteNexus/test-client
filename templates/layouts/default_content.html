@@ -1,0 +1,7 @@
+{# templates/layouts/default_content.html - UPDATED #}
+<article class="content-default mb-5">
+    {{ entry.content_html | safe }}
+</article>
+
+{# Include the optional gallery partial #}
+{% include 'partials/_optional_gallery.html' %}

@@ -1,0 +1,27 @@
+<header class="site-header">
+    <div class="container">
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                {# You can put an img tag here for a logo later #}
+                <img src="{{ url_for('static', filename='assets/test.png') }}" alt="Site Logo" style="height: 50px; vertical-align: middle;">
+                SiteNexus Starter
+            </a>
+        </div>
+        <nav class="main-navigation">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                {% if all_pages %}
+                    {% for nav_page in all_pages %}
+                        {# Only show pages that have a slug and are not the homepage itself (if index.md/home.md is used) #}
+                        {% if nav_page.slug and nav_page.slug not in ['index', 'home'] %}
+                            <li><a href="{{ url_for('page', slug=nav_page.slug) }}">{{ nav_page.title }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {# Example: Add a static link like a Contact page if you have one #}
+                {# You might have a contact.md with slug 'contact' #}
+                {# For now, let's assume it would be part of all_pages if it exists #}
+            </ul>
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,43 @@
+{# templates/layouts/testimonial-wall.html #}
+
+{# First, render the main page content from the Markdown body (this can be an intro to the testimonials) #}
+{% if entry.content_html %}
+    <article class="page-content mb-5">
+        {{ entry.content_html | safe }}
+    </article>
+{% endif %}
+
+{# Then, render the grid of testimonials if they exist #}
+{% if entry.testimonials and entry.testimonials is iterable and entry.testimonials is not string and entry.testimonials | length > 0 %}
+<section class="testimonial-wall-section mt-4 pt-4 border-top">
+    {# You can add a section title here if desired, or make it configurable via frontmatter #}
+    {# Example: <h2 class="text-center mb-4 display-5">{{ entry.testimonial_section_title | default("What Our Clients Say") }}</h2> #}
+    
+    <div class="row justify-content-center">
+        {% for testimonial in entry.testimonials %}
+        <div class="col-md-6 col-lg-4 mb-4 d-flex align-items-stretch"> {# Responsive grid for testimonials #}
+            <div class="card h-100 testimonial-card">
+                <div class="card-body d-flex flex-column">
+                    {% if testimonial.author_photo %}
+                    <img src="{{ testimonial.author_photo if testimonial.author_photo.startswith('/') else url_for('static', filename=testimonial.author_photo) }}" 
+                         alt="Photo of {{ testimonial.author_name | default('Client') }}" 
+                         class="testimonial-author-photo rounded-circle mx-auto mb-3" 
+                         style="width: 80px; height: 80px; object-fit: cover; border: 2px solid #eee;">
+                    {% endif %}
+                    
+                    <blockquote class="blockquote mb-0 flex-grow-1">
+                        <p class="testimonial-quote"><em>"{{ testimonial.quote | striptags | safe }}"</em></p> {# Assuming quote is plain text or simple markdown, striptags for safety if markdown is too complex here #}
+                    </blockquote>
+                    <footer class="blockquote-footer mt-3">
+                        <strong>{{ testimonial.author_name | default("Valued Client") }}</strong>
+                        {% if testimonial.author_info %}
+                            <cite title="Source Title"><br>{{ testimonial.author_info }}</cite>
+                        {% endif %}
+                    </footer>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

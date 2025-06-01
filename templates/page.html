@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ entry.title }} - {{ site_name | default("My SiteNexus Site") }}{% endblock %}
+
+{% block content %}
+    {# Default to 'page' layout (which will use default_content.html) if no layout is specified #}
+    {% set selected_layout = entry.layout | default('page') %}
+
+    {% if selected_layout == 'hero' %}
+        {% include 'layouts/hero.html' %}
+    {% elif selected_layout == 'side-image' %}
+        {% include 'layouts/side-image.html' %}
+    {% elif selected_layout == 'gallery' %}
+        {% include 'layouts/gallery.html' %}
+    {% elif selected_layout == 'services-grid' %}
+        {% include 'layouts/services-grid.html' %}
+    {% elif selected_layout == 'team-showcase' %}
+        {% include 'layouts/team-showcase.html' %}
+    {% elif selected_layout == 'testimonial-wall' %}
+        {% include 'layouts/testimonial-wall.html' %}
+    {% elif selected_layout == 'faq' %}
+        {% include 'layouts/faq.html' %}
+    {% elif selected_layout == 'pricing-table' %}
+        {% include 'layouts/pricing-table.html' %}
+    {# ... additional layouts as they get added ... #}
+    {% else %} {# Default or if layout: page is specified #}
+        {% include 'layouts/default_content.html' %}
+    {% endif %}
+{% endblock %}

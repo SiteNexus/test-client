@@ -1,0 +1,152 @@
+# static/admin/config.yml
+
+# Backend Configuration:
+# Choose one backend. GitHub is often simplest if clients have GitHub accounts.
+# git-gateway requires additional setup (often with Netlify Identity or similar).
+backend:
+  name: test-repo # github, gitlab, bitbucket, or git-gateway
+  #repo: your-github-username/client-site-repo # Replace with the actual repo path pattern or specific repo
+  #branch: main # Or whatever branch Decap CMS should commit to
+  # For git-gateway with Netlify Identity:
+  # name: git-gateway
+  # For GitHub backend, you might need site_domain for OAuth if deploying on Netlify/Vercel
+  # site_domain: client-domain.com
+
+# Media and Public Folders:
+# media_folder is where Decap CMS saves uploaded files in your Git repository.
+# public_folder is the path prefix Decap CMS uses when inserting links to these files in your content.
+# These paths must align with how your Flask app serves static files.
+media_folder: "static/assets/uploads" # Relative to project root
+public_folder: "/static/assets/uploads" # Absolute path from site root
+
+# Collections: Defines your content types. We'll focus on "Pages".
+collections:
+  - name: "pages" # A collection for general site pages
+    label: "Pages" # How it's displayed in the CMS UI
+    folder: "content" # The directory in your Git repo where these .md files are stored
+    create: true # Allow users to create new pages
+    slug: "{{slug}}" # How filenames are generated from the 'slug' field.
+    editor:
+      preview: false # Set to true if you want to enable live preview (requires more setup)
+    fields: # Defines the fields for each page
+      - { label: "Title", name: "title", widget: "string", hint: "The main title of the page, appears in the browser tab and on the page." }
+      - { label: "URL Slug", name: "slug", widget: "string", hint: "The URL part for this page (e.g., 'about-us', 'contact'). Use lowercase letters, numbers, and hyphens only." }
+      - { label: "Meta Description (for SEO)", name: "description", widget: "text", required: false, hint: "A short summary of the page for search engines (around 150-160 characters)." }
+      - label: "Page Layout"
+        name: "layout"
+        widget: "select"
+        options:
+          - { label: "Default (Content Only)", value: "page" }
+          - { label: "Hero Image Top", value: "hero" }
+          - { label: "Text with Side Image", value: "side-image" }
+          - { label: "Image Gallery Top", value: "gallery" }
+          - { label: "Services/Features Grid", value: "services-grid" }
+          - { label: "Team Showcase", value: "team-showcase" }
+          - { label: "Testimonial Wall", value: "testimonial-wall" }
+          - { label: "FAQ Page (Accordion)", value: "faq" }
+          - { label: "Pricing Table", value: "pricing-table" }
+        default: "page"
+        required: true
+        hint: "Choose the overall structure for this page."
+
+      # --- Fields for Main Body Content (Common to most layouts) ---
+      - { label: "Main Page Content", name: "body", widget: "markdown", hint: "The primary text content for this page. Appears after hero/side images, or as the main content for default/FAQ/pricing layouts before their specific item lists." }
+
+      # --- Optional Fields for Specific Layouts ---
+      # These fields can be filled in when the corresponding layout is chosen.
+      # Hints guide the user. You can explore Decap CMS conditional fields for more advanced UI,
+      # but making them optional and well-hinted is simpler to start.
+
+      - { label: "Hero Image (for 'Hero Image Top' layout)", name: "hero_image", widget: "image", required: false, media_folder: "{{media_folder}}/hero", public_folder: "{{public_folder}}/hero", hint: "Large banner image for the top of the page." }
+      
+      - { label: "Side Image (for 'Text with Side Image' layout)", name: "side_image", widget: "image", required: false, media_folder: "{{media_folder}}/side", public_folder: "{{public_folder}}/side", hint: "Image appearing next to the main content." }
+      - { label: "Side Image Position", name: "side_image_position", widget: "select", options: ["left", "right"], default: "left", required: false, hint: "Position of the side image relative to text (for 'Text with Side Image' layout)." }
+
+      - { label: "Gallery Section Title (Optional)", name: "gallery_title", widget: "string", required: false, hint: "Title for the image gallery section (e.g., 'Our Portfolio'). Defaults to 'Image Gallery'."}
+      - label: "Gallery Images (for 'Image Gallery Top' layout or optional gallery on other layouts)"
+        name: "gallery_images"
+        widget: "list"
+        required: false
+        summary: "{{fields.image}}"
+        hint: "Add images for a gallery. Used by 'Image Gallery Top' layout, or as an optional section on 'Hero' and other layouts."
+        field: { label: "Image", name: "image", widget: "image", media_folder: "{{media_folder}}/gallery", public_folder: "{{public_folder}}/gallery" }
+      - { label: "Default Alt Text for Gallery Images (Optional)", name: "gallery_alt_text", widget: "string", required: false, hint: "Fallback alt text for images in this page's gallery."}
+
+      - { label: "Service/Feature Section Title (Optional)", name: "services_section_title", widget: "string", required: false, hint: "Title for the services/features grid (for 'Services/Features Grid' layout)." }
+      - label: "Service/Feature Items (for 'Services/Features Grid' layout)"
+        name: "service_items"
+        widget: "list"
+        required: false
+        summary: "{{fields.item_title}}"
+        fields:
+          - { label: "Icon (e.g., 'fas fa-concierge-bell' or path like '/static/icons/service.svg')", name: "item_icon", widget: "string", required: false }
+          - { label: "Item Title", name: "item_title", widget: "string" }
+          - { label: "Item Short Description", name: "item_description", widget: "text" }
+          - { label: "Item Link (Optional, e.g., /services/detail-page)", name: "item_link", widget: "string", required: false }
+      
+      - { label: "Team Section Title (Optional)", name: "team_section_title", widget: "string", required: false, hint: "Title for the team showcase (for 'Team Showcase' layout)." }
+      - label: "Team Members (for 'Team Showcase' layout)"
+        name: "team_members"
+        widget: "list"
+        required: false
+        summary: "{{fields.name}} - {{fields.role}}"
+        fields:
+          - { label: "Full Name", name: "name", widget: "string" }
+          - { label: "Role/Title", name: "role", widget: "string" }
+          - { label: "Photo", name: "photo", widget: "image", required: false, media_folder: "{{media_folder}}/team", public_folder: "{{public_folder}}/team" }
+          - { label: "Short Bio (can use Markdown)", name: "bio", widget: "markdown", required: false }
+          - { label: "Email Address (Optional)", name: "email", widget: "string", required: false }
+          - { label: "LinkedIn Profile URL (Optional)", name: "linkedin_url", widget: "string", required: false }
+
+      - { label: "Testimonial Section Title (Optional)", name: "testimonial_section_title", widget: "string", required: false, hint: "Title for the testimonials section (for 'Testimonial Wall' layout)." }
+      - label: "Testimonials (for 'Testimonial Wall' layout)"
+        name: "testimonials"
+        widget: "list"
+        required: false
+        summary: "{{fields.author_name}} - {{fields.quote | truncate(50, '...')}}"
+        fields:
+          - { label: "Quote/Testimonial Text", name: "quote", widget: "text" } # 'text' for textarea, 'markdown' for rich text
+          - { label: "Author's Name", name: "author_name", widget: "string" }
+          - { label: "Author's Title/Company (e.g., CEO, Acme Inc.)", name: "author_info", widget: "string", required: false }
+          - { label: "Author's Photo (Optional)", name: "author_photo", widget: "image", required: false, media_folder: "{{media_folder}}/testimonials", public_folder: "{{public_folder}}/testimonials" }
+
+      - { label: "FAQ Section Title (Optional)", name: "faq_section_title", widget: "string", required: false, hint: "Title for the FAQ section (for 'FAQ Page' layout)." }
+      - label: "FAQ Items (for 'FAQ Page' layout)"
+        name: "faq_items"
+        widget: "list"
+        required: false
+        summary: "{{fields.question}}"
+        fields:
+          - { label: "Question", name: "question", widget: "string" }
+          - { label: "Answer (can use Markdown for formatting)", name: "answer", widget: "markdown" }
+
+      - { label: "Pricing Section Title (Optional)", name: "pricing_section_title", widget: "string", required: false, hint: "Title for the pricing table (for 'Pricing Table' layout)." }
+      - label: "Pricing Plans (for 'Pricing Table' layout)"
+        name: "pricing_plans"
+        widget: "list"
+        required: false
+        summary: "{{fields.plan_name}} - {{fields.price}}{{fields.frequency}}"
+        fields:
+          - { label: "Plan Name (e.g., Basic, Pro)", name: "plan_name", widget: "string" }
+          - { label: "Price (e.g., $29, Contact Us)", name: "price", widget: "string" }
+          - { label: "Frequency (e.g., /month, /year)", name: "frequency", widget: "string", required: false }
+          - { label: "Short Description of Plan", name: "plan_description", widget: "text", required: false }
+          - { label: "Features (List - one per item)", name: "features", widget: "list", field: {label: "Feature", name: "feature_item", widget: "string"}, required: false, hint: "Simple bulleted list." }
+          - { label: "Features (Markdown - for richer formatting)", name: "features_markdown", widget: "markdown", required: false, hint: "Use if features need bolding, links etc." }
+          - { label: "Call to Action Button Text", name: "cta_button_text", widget: "string", default: "Get Started" }
+          - { label: "Call to Action Button Link (URL)", name: "cta_button_link", widget: "string", default: "/contact" }
+          - { label: "Is this plan featured/highlighted?", name: "is_featured", widget: "boolean", default: false, required: false }
+
+  # You could add other collections here, e.g., for a simple Blog:
+  # - name: "posts"
+  #   label: "Blog Posts"
+  #   folder: "content/posts" # Store blog posts in a subfolder
+  #   create: true
+  #   slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+  #   fields:
+  #     - { label: "Title", name: "title", widget: "string" }
+  #     - { label: "Publish Date", name: "date", widget: "datetime" }
+  #     - { label: "Author", name: "author", widget: "string", required: false }
+  #     - { label: "Summary", name: "summary", widget: "text", required: false }
+  #     - { label: "Featured Image", name: "featured_image", widget: "image", required: false, media_folder: "{{media_folder}}/blog", public_folder: "{{public_folder}}/blog" }
+  #     - { label: "Body", name: "body", widget: "markdown" }

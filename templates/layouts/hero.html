@@ -1,0 +1,18 @@
+{# templates/layouts/hero.html - REVISED #}
+
+{# Render the Hero Image First #}
+{% if entry.hero_image %}
+<div class="custom-hero-section text-center mb-4">
+    <img src="{{ entry.hero_image if entry.hero_image.startswith('/') else url_for('static', filename=entry.hero_image) }}" 
+         alt="{{ entry.title }} hero image" 
+         class="custom-hero-image img-fluid rounded shadow">
+</div>
+{% endif %}
+
+{# Render the Main Page Content #}
+<article class="content-hero mb-5">
+    {{ entry.content_html | safe }}
+</article>
+
+{# Include the optional gallery partial #}
+{% include 'partials/_optional_gallery.html' %}

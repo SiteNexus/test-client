@@ -1,0 +1,55 @@
+{# templates/layouts/team-showcase.html #}
+
+{# First, render the main page content from the Markdown body (this can be an intro to the team) #}
+{% if entry.content_html %}
+    <article class="page-content mb-5">
+        {{ entry.content_html | safe }}
+    </article>
+{% endif %}
+
+{# Then, render the grid of team members if they exist #}
+{% if entry.team_members and entry.team_members is iterable and entry.team_members is not string and entry.team_members | length > 0 %}
+<section class="team-showcase-section mt-4 pt-4 border-top">
+    {# You can add a section title here if desired, or make it configurable via frontmatter #}
+    {# Example: <h2 class="text-center mb-4 display-5">{{ entry.team_section_title | default("Meet Our Team") }}</h2> #}
+    
+    <div class="row justify-content-center">
+        {% for member in entry.team_members %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch"> {# Responsive grid, d-flex for equal height cards #}
+            <div class="card h-100 team-member-card text-center"> {# h-100 for equal height, text-center for content #}
+                {% if member.photo %}
+                    <img src="{{ member.photo if member.photo.startswith('/') else url_for('static', filename=member.photo) }}" 
+                         alt="Photo of {{ member.name | default('Team Member') }}" 
+                         class="card-img-top team-member-photo mx-auto mt-3 rounded-circle" 
+                         style="width: 150px; height: 150px; object-fit: cover;"> {# Inline style for consistent photo size #}
+                {% else %}
+                    {# Placeholder if no photo #}
+                    <div class="team-member-photo-placeholder mx-auto mt-3 rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                         style="width: 150px; height: 150px; color: white; font-size: 2rem;">
+                         👤 {# Default user icon emoji #}
+                    </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title mt-2">{{ member.name | default("Team Member") }}</h5>
+                    {% if member.role %}
+                        <p class="card-subtitle mb-2 text-muted">{{ member.role }}</p>
+                    {% endif %}
+                    {% if member.bio %}
+                        <p class="card-text small flex-grow-1">{{ member.bio | safe }}</p> {# Assuming bio can be short markdown #}
+                    {% endif %}
+                    <div class="mt-auto team-member-social-links">
+                        {% if member.email %}
+                            <a href="mailto:{{ member.email }}" class="btn btn-outline-primary btn-sm me-2" title="Email {{ member.name }}">📧 Email</a>
+                        {% endif %}
+                        {% if member.linkedin_url %}
+                            <a href="{{ member.linkedin_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm" title="{{ member.name }} on LinkedIn">🔗 LinkedIn</a>
+                        {% endif %}
+                        {# Add other social links as needed #}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

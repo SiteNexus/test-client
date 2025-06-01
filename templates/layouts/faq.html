@@ -1,0 +1,33 @@
+{# templates/layouts/faq.html #}
+
+{# First, render the main page content from the Markdown body (this can be an intro to the FAQ) #}
+{% if entry.content_html %}
+    <article class="page-content mb-5">
+        {{ entry.content_html | safe }}
+    </article>
+{% endif %}
+
+{# Then, render the accordion of FAQ items if they exist #}
+{% if entry.faq_items and entry.faq_items is iterable and entry.faq_items is not string and entry.faq_items | length > 0 %}
+<section class="faq-section mt-4 pt-4 border-top">
+    {# You can add a section title here if desired, or make it configurable via frontmatter #}
+    {# Example: <h2 class="text-center mb-4 display-5">{{ entry.faq_section_title | default("Frequently Asked Questions") }}</h2> #}
+    
+    <div class="accordion" id="faqAccordion">
+        {% for item in entry.faq_items %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="faqHeading{{ loop.index }}">
+                <button class="accordion-button {% if loop.first %}collapsed{% else %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse{{ loop.index }}" aria-expanded="{% if loop.first %}false{% else %}false{% endif %}" aria-controls="faqCollapse{{ loop.index }}">
+                    {{ item.question | default("Question Missing") }}
+                </button>
+            </h2>
+            <div id="faqCollapse{{ loop.index }}" class="accordion-collapse collapse {% if loop.first %}{% else %}{% endif %}" aria-labelledby="faqHeading{{ loop.index }}" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    {{ item.answer | markdown | safe if item.answer else "Answer coming soon." }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

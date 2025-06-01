@@ -1,0 +1,32 @@
+{# templates/layouts/side-image.html - UPDATED #}
+{#
+<h1>{{ entry.title }}</h1>
+#}
+<div class="row align-items-center my-4">
+    {% if entry.side_image_position == 'right' %}
+        <div class="col-md-7 order-md-1">
+            <article class="content-side-image-text">
+                {{ entry.content_html | safe }}
+            </article>
+        </div>
+        <div class="col-md-5 order-md-2 text-center">
+            {% if entry.side_image %}
+            <img src="{{ entry.side_image if entry.side_image.startswith('/') else url_for('static', filename=entry.side_image) }}" alt="{{ entry.title }} side image" class="img-fluid rounded shadow custom-side-image">
+            {% endif %}
+        </div>
+    {% else %} {# Default to image on the left #}
+        <div class="col-md-5 text-center">
+            {% if entry.side_image %}
+            <img src="{{ entry.side_image if entry.side_image.startswith('/') else url_for('static', filename=entry.side_image) }}" alt="{{ entry.title }} side image" class="img-fluid rounded shadow custom-side-image">
+            {% endif %}
+        </div>
+        <div class="col-md-7">
+            <article class="content-side-image-text">
+                {{ entry.content_html | safe }}
+            </article>
+        </div>
+    {% endif %}
+</div>
+
+{# Include the optional gallery partial #}
+{% include 'partials/_optional_gallery.html' %}

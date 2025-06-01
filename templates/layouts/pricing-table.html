@@ -1,0 +1,58 @@
+{# templates/layouts/pricing-table.html #}
+
+{# First, render the main page content from the Markdown body (this can be an intro to the pricing plans) #}
+{% if entry.content_html %}
+    <article class="page-content mb-5 text-center"> {# Added text-center for intro if desired #}
+        {{ entry.content_html | safe }}
+    </article>
+{% endif %}
+
+{# Then, render the pricing plans if they exist #}
+{% if entry.pricing_plans and entry.pricing_plans is iterable and entry.pricing_plans is not string and entry.pricing_plans | length > 0 %}
+<section class="pricing-table-section mt-4 pt-4">
+    {# You can add a section title here if desired, or make it configurable via frontmatter #}
+    {# Example: <h2 class="text-center mb-5 display-5">{{ entry.pricing_section_title | default("Our Plans") }}</h2> #}
+    
+    <div class="row justify-content-center">
+        {% for plan in entry.pricing_plans %}
+        <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch"> {# Responsive grid for pricing plans #}
+            <div class="card h-100 shadow-sm {% if plan.plan_is_featured %}border-primary border-2 popular-plan{% else %}border-light{% endif %}">
+                <div class="card-header text-center {% if plan.plan_is_featured %}bg-primary text-white{% endif %}">
+                    <h4 class="my-0 fw-normal">{{ plan.plan_name | default("Plan Name") }}</h4>
+                    {% if plan.plan_is_featured %}
+                        <span class="badge bg-light text-primary position-absolute top-0 start-100 translate-middle p-2">POPULAR</span>
+                    {% endif %}
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <div class="text-center">
+                        <h1 class="card-title pricing-card-title">
+                            {{ plan.price | default("$0") }}
+                            <small class="text-muted fw-light">{{ plan.frequency | default("/mo") }}</small>
+                        </h1>
+                        {% if plan.plan_description %}
+                            <p class="text-muted mb-4">{{ plan.plan_description }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <ul class="list-unstyled mt-3 mb-4 text-center flex-grow-1">
+                        {% if plan.plan_features and plan.plan_features is iterable and plan.plan_features is not string %}
+                            {% for feature_item in plan.plan_features %}
+                                {# Check if feature_item is a string or an object from a list widget #}
+                                {% set feature_text = feature_item.feature_item if feature_item is mapping and feature_item.feature_item else feature_item %}
+                                <li>{{ feature_text }}</li>
+                            {% endfor %}
+                        {% elif plan.features_markdown %} {# Alternative: use markdown for features #}
+                            {{ plan.features_markdown | markdown | safe }}
+                        {% endif %}
+                    </ul>
+                    <a href="{{ plan.plan_cta_link | default('#') }}" 
+                       class="btn btn-lg btn-block {% if plan.plan_is_featured %}btn-primary{% else %}btn-outline-primary{% endif %} mt-auto">
+                       {{ plan.plan_cta_text | default("Sign Up") }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

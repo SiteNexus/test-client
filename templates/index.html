@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome! - My Site{% endblock %}
+
+{% block content %}
+    <h2>Welcome to the Homepage!</h2>
+    <p>This is the main index page.</p>
+    <h3>Available Pages:</h3>
+    <ul>
+        {% for p in pages %}
+        <li><a href="{{ url_for('page', slug=p.slug) }}">{{ p.title }}</a></li>
+        {% else %}
+        <li>No pages found in content directory.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
