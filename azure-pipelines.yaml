@@ -24,6 +24,8 @@ variables:
   # This must match the name of the Static Web App you created in the Azure portal.
   staticWebAppName: '$(clientSWAFromADO)' # Name of variable defined in ADO UI
 
+  deploymentToken: '$(SWA_DEPLOYMENT_TOKEN)'
+
   # (Optional) Name of the resource group where the Static Web App is located.
   # Often not needed if the Static Web App name is unique within the subscription scope
   # of the service connection, but good to have if specified by the deployment task.
@@ -57,10 +59,9 @@ steps:
 #    This task deploys the content of your 'build/' folder to the specified Azure Static Web App.
 - task: AzureStaticWebApp@0
   inputs:
-    azureSubscription: '$(azureSubscriptionServiceConnection)' # Reference to your Azure service connection
-    appName: '$(staticWebAppName)' # Name of your Static Web App in Azure
-    appLocation: '/' # Location of your application code within the repository (root)
-    outputLocation: 'build' # Location of the build output directory (relative to appLocation)
+    azure_static_web_apps_api_token: '$(deploymentToken)'
+    app_location: '/' # Location of your application code within the repository (root)
+    output_location: 'build' # Location of the build output directory (relative to appLocation)
                             # This is where Flask-Frozen (via build_static.py) saves the static files.
     # apiLocation: '' # Optional: Location of your Azure Functions code if you have an API. Leave blank or omit if no API.
     # skipApiBuild: true # Optional: Set to true if you have no API or build it separately.
