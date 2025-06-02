@@ -9,6 +9,9 @@
   <link href="/static/admin/config.yml" type="text/yaml" rel="cms-config-url">
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
+    CMS.registerPreviewStyle("/static/css/style.css");
+  </script>
+  <script>
     // Ensure the CMS object is available from the Decap script
     // You might need to wait for DOMContentLoaded or ensure the Decap script has fully loaded
     // if you encounter issues with CMS being undefined.

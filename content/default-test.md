@@ -2,6 +2,7 @@
 title: Default
 slug: default
 description: Learn more about the people behind SiteNexus.
+layout: page
 ---
 ### Our Mission
 To empower small businesses with high-quality, affordable web solutions.
