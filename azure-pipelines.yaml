@@ -1,0 +1,69 @@
+# azure-pipelines.yml
+
+trigger:
+- main  # Triggers the pipeline on pushes or merges to the main branch
+
+pool:
+  vmImage: 'ubuntu-latest' # Uses a Linux agent for the build
+
+variables:
+  # Define the Python version to use
+  python.version: '3.10' # Or 3.8, 3.10, 3.11, etc. - match your development environment
+
+  # --- Azure Static Web App Specific Variables ---
+  # These should ideally be configured as Pipeline Variables in the Azure DevOps UI
+  # for security and per-client customization, rather than hardcoded here.
+  # However, for the template, we define them so you know what's needed.
+  # You would then override them in the pipeline settings in Azure DevOps.
+
+  # Name of the Azure Service Connection you created in Azure DevOps Project Settings
+  # This connection allows the pipeline to authenticate with your Azure subscription.
+  azureSubscriptionServiceConnection: 'SiteNexusServiceConnection'
+
+  # Name of the pre-existing Azure Static Web App resource for this client's site
+  # This must match the name of the Static Web App you created in the Azure portal.
+  staticWebAppName: '$(clientSWAFromADO)' # Name of variable defined in ADO UI
+
+  # (Optional) Name of the resource group where the Static Web App is located.
+  # Often not needed if the Static Web App name is unique within the subscription scope
+  # of the service connection, but good to have if specified by the deployment task.
+  # resourceGroupName: 'YOUR_CLIENT_RESOURCE_GROUP_NAME'
+
+steps:
+# 1. Set up Python Environment
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+  displayName: 'Use Python $(python.version)'
+
+# 2. Install Dependencies
+#    This step assumes you have a requirements.txt file in your repository root.
+- script: |
+    python -m venv env     # Create a virtual environment
+    source env/bin/activate # Activate the virtual environment
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install Python dependencies'
+
+# 3. Build the Static Website
+#    This runs your build_static.py script, which should generate files into the 'build/' directory.
+- script: |
+    source env/bin/activate # Ensure virtual environment is active
+    python build_static.py
+  displayName: 'Build Static Website'
+  # The 'build/' directory (output of freezer.freeze()) is crucial for the next step.
+
+# 4. Deploy to Azure Static Web Apps
+#    This task deploys the content of your 'build/' folder to the specified Azure Static Web App.
+- task: AzureStaticWebApp@0
+  inputs:
+    azureSubscription: '$(azureSubscriptionServiceConnection)' # Reference to your Azure service connection
+    appName: '$(staticWebAppName)' # Name of your Static Web App in Azure
+    appLocation: '/' # Location of your application code within the repository (root)
+    outputLocation: 'build' # Location of the build output directory (relative to appLocation)
+                            # This is where Flask-Frozen (via build_static.py) saves the static files.
+    # apiLocation: '' # Optional: Location of your Azure Functions code if you have an API. Leave blank or omit if no API.
+    # skipApiBuild: true # Optional: Set to true if you have no API or build it separately.
+    # routesLocation: '/' # Optional: Location of your routes.json file if you use custom routing. Default is root.
+    # configFilePath: # Optional: Path to staticwebapp.config.json if you use it for advanced config.
+  displayName: 'Deploy to Azure Static Web App'
