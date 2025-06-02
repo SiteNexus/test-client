@@ -5,10 +5,10 @@ layout: hero
 hero_image: assets/sample-hero.svg
 description: This page has a hero image and a gallery below the content.
 gallery_images:
-  - assets/uploads/gallery-thumb1.jpg
-  - assets/uploads/gallery-thumb2.jpg
-  - assets/uploads/gallery-thumb3.jpg
-  - assets/uploads/gallery-thumb4.jpg
+  - assets/uploads/test.png
+  - assets/uploads/test.png
+  - assets/uploads/test.png
+  - assets/uploads/test.png
 ---
 
 ## Main Content After Hero
